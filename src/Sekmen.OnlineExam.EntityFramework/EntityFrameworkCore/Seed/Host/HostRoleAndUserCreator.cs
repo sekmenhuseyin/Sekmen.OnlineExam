@@ -1,14 +1,14 @@
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Sekmen.OnlineExam.Authorization;
 using Sekmen.OnlineExam.Authorization.Roles;
 using Sekmen.OnlineExam.Authorization.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace Sekmen.OnlineExam.EntityFrameworkCore.Seed.Host
 {
@@ -76,7 +76,7 @@ namespace Sekmen.OnlineExam.EntityFrameworkCore.Seed.Host
                     UserName = AbpUserBase.AdminUserName,
                     Name = "admin",
                     Surname = "admin",
-                    EmailAddress = "admin@aspnetboilerplate.com",
+                    EmailAddress = "h@sekmen.dev",
                     IsEmailConfirmed = true,
                     IsActive = true
                 };
