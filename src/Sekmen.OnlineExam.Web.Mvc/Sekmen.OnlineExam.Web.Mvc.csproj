@@ -15,6 +15,12 @@
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="wwwroot\libs\**" />
+    <Content Remove="wwwroot\libs\**" />
+    <EmbeddedResource Remove="wwwroot\libs\**" />
+    <None Remove="wwwroot\libs\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config" />
     <None Update="Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -43,7 +49,6 @@
     <PackageReference Include="Abp.Castle.Log4Net" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\libs\" />
     <Folder Include="wwwroot\view-resources\Views\_Bundles\" />
   </ItemGroup>
 </Project>

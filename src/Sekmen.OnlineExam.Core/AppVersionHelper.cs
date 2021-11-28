@@ -13,7 +13,7 @@ namespace Sekmen.OnlineExam
         /// Gets current version of the application.
         /// It's also shown in the web page.
         /// </summary>
-        public const string Version = "5.5.0.0";
+        public const string Version = "0.1";
 
         /// <summary>
         /// Gets release (last build) date of the application.
@@ -21,6 +21,6 @@ namespace Sekmen.OnlineExam
         /// </summary>
         public static DateTime ReleaseDate => LzyReleaseDate.Value;
 
-        private static readonly Lazy<DateTime> LzyReleaseDate = new Lazy<DateTime>(() => new FileInfo(typeof(AppVersionHelper).GetAssembly().Location).LastWriteTime);
+        private static readonly Lazy<DateTime> LzyReleaseDate = new(() => new FileInfo(typeof(AppVersionHelper).GetAssembly().Location).LastWriteTime);
     }
 }
