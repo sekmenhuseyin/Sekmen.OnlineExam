@@ -1,41 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Abp;
-using Abp.AspNetCore.Mvc.Authorization;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.MultiTenancy;
-using Abp.Notifications;
-using Abp.Runtime.Session;
-using Abp.Threading;
-using Abp.Timing;
 using Abp.UI;
 using Abp.Web.Models;
 using Abp.Zero.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Sekmen.OnlineExam.Authorization;
 using Sekmen.OnlineExam.Authorization.Users;
 using Sekmen.OnlineExam.Controllers;
 using Sekmen.OnlineExam.Identity;
 using Sekmen.OnlineExam.MultiTenancy;
-using Sekmen.OnlineExam.Sessions;
 using Sekmen.OnlineExam.Web.Models.Account;
-using Sekmen.OnlineExam.Web.Views.Shared.Components.TenantChange;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Sekmen.OnlineExam.Web.Controllers
 {
     public class AccountController : OnlineExamControllerBase
     {
-        private readonly UserManager _userManager;
         private readonly TenantManager _tenantManager;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -43,12 +33,9 @@ namespace Sekmen.OnlineExam.Web.Controllers
         private readonly LogInManager _logInManager;
         private readonly SignInManager _signInManager;
         private readonly UserRegistrationManager _userRegistrationManager;
-        private readonly ISessionAppService _sessionAppService;
         private readonly ITenantCache _tenantCache;
-        private readonly INotificationPublisher _notificationPublisher;
 
         public AccountController(
-            UserManager userManager,
             IMultiTenancyConfig multiTenancyConfig,
             TenantManager tenantManager,
             IUnitOfWorkManager unitOfWorkManager,
@@ -56,11 +43,8 @@ namespace Sekmen.OnlineExam.Web.Controllers
             LogInManager logInManager,
             SignInManager signInManager,
             UserRegistrationManager userRegistrationManager,
-            ISessionAppService sessionAppService,
-            ITenantCache tenantCache,
-            INotificationPublisher notificationPublisher)
+            ITenantCache tenantCache)
         {
-            _userManager = userManager;
             _multiTenancyConfig = multiTenancyConfig;
             _tenantManager = tenantManager;
             _unitOfWorkManager = unitOfWorkManager;
@@ -68,9 +52,7 @@ namespace Sekmen.OnlineExam.Web.Controllers
             _logInManager = logInManager;
             _signInManager = signInManager;
             _userRegistrationManager = userRegistrationManager;
-            _sessionAppService = sessionAppService;
             _tenantCache = tenantCache;
-            _notificationPublisher = notificationPublisher;
         }
 
         #region Login / Logout
@@ -84,10 +66,7 @@ namespace Sekmen.OnlineExam.Web.Controllers
 
             return View(new LoginFormViewModel
             {
-                ReturnUrl = returnUrl,
-                IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled,
-                IsSelfRegistrationAllowed = IsSelfRegistrationEnabled(),
-                MultiTenancySide = AbpSession.MultiTenancySide
+                ReturnUrl = returnUrl
             });
         }
 
@@ -261,112 +240,6 @@ namespace Sekmen.OnlineExam.Web.Controllers
 
         #endregion
 
-        #region External Login
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            var redirectUrl = Url.Action(
-                "ExternalLoginCallback",
-                "Account",
-                new
-                {
-                    ReturnUrl = returnUrl
-                });
-
-            return Challenge(
-                // TODO: ...?
-                // new Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties
-                // {
-                //     Items = { { "LoginProvider", provider } },
-                //     RedirectUri = redirectUrl
-                // },
-                provider
-            );
-        }
-
-        [UnitOfWork]
-        public virtual async Task<ActionResult> ExternalLoginCallback(string returnUrl, string remoteError = null)
-        {
-            returnUrl = NormalizeReturnUrl(returnUrl);
-
-            if (remoteError != null)
-            {
-                Logger.Error("Remote Error in ExternalLoginCallback: " + remoteError);
-                throw new UserFriendlyException(L("CouldNotCompleteLoginOperation"));
-            }
-
-            var externalLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
-            if (externalLoginInfo == null)
-            {
-                Logger.Warn("Could not get information from external login.");
-                return RedirectToAction(nameof(Login));
-            }
-
-            await _signInManager.SignOutAsync();
-
-            var tenancyName = GetTenancyNameOrNull();
-
-            var loginResult = await _logInManager.LoginAsync(externalLoginInfo, tenancyName);
-
-            switch (loginResult.Result)
-            {
-                case AbpLoginResultType.Success:
-                    await _signInManager.SignInAsync(loginResult.Identity, false);
-                    return Redirect(returnUrl);
-                case AbpLoginResultType.UnknownExternalLogin:
-                    return await RegisterForExternalLogin(externalLoginInfo);
-                default:
-                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
-                        loginResult.Result,
-                        externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email) ?? externalLoginInfo.ProviderKey,
-                        tenancyName
-                    );
-            }
-        }
-
-        private async Task<ActionResult> RegisterForExternalLogin(ExternalLoginInfo externalLoginInfo)
-        {
-            var email = externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email);
-            var nameinfo = ExternalLoginInfoHelper.GetNameAndSurnameFromClaims(externalLoginInfo.Principal.Claims.ToList());
-
-            var viewModel = new RegisterViewModel
-            {
-                EmailAddress = email,
-                Name = nameinfo.name,
-                Surname = nameinfo.surname,
-                IsExternalLogin = true,
-                ExternalLoginAuthSchema = externalLoginInfo.LoginProvider
-            };
-
-            if (nameinfo.name != null &&
-                nameinfo.surname != null &&
-                email != null)
-            {
-                return await Register(viewModel);
-            }
-
-            return RegisterView(viewModel);
-        }
-
-        [UnitOfWork]
-        protected virtual async Task<List<Tenant>> FindPossibleTenantsOfUserAsync(UserLoginInfo login)
-        {
-            List<User> allUsers;
-            using (_unitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant))
-            {
-                allUsers = await _userManager.FindAllAsync(login);
-            }
-
-            return allUsers
-                .Where(u => u.TenantId != null)
-                .Select(u => AsyncHelper.RunSync(() => _tenantManager.FindByIdAsync(u.TenantId.Value)))
-                .ToList();
-        }
-
-        #endregion
-
         #region Helpers
 
         public ActionResult RedirectToAppHome()
@@ -377,19 +250,6 @@ namespace Sekmen.OnlineExam.Web.Controllers
         public string GetAppHomeUrl()
         {
             return Url.Action("Index", "About");
-        }
-
-        #endregion
-
-        #region Change Tenant
-
-        public async Task<ActionResult> TenantChangeModal()
-        {
-            var loginInfo = await _sessionAppService.GetCurrentLoginInformations();
-            return View("/Views/Shared/Components/TenantChange/_ChangeModal.cshtml", new ChangeModalViewModel
-            {
-                TenancyName = loginInfo.Tenant?.TenancyName
-            });
         }
 
         #endregion
@@ -424,37 +284,6 @@ namespace Sekmen.OnlineExam.Web.Controllers
             }
 
             return defaultValueBuilder();
-        }
-
-        #endregion
-
-        #region Etc
-
-        /// <summary>
-        /// This is a demo code to demonstrate sending notification to default tenant admin and host admin uers.
-        /// Don't use this code in production !!!
-        /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        [AbpMvcAuthorize]
-        public async Task<ActionResult> TestNotification(string message = "")
-        {
-            if (message.IsNullOrEmpty())
-            {
-                message = "This is a test notification, created at " + Clock.Now;
-            }
-
-            var defaultTenantAdmin = new UserIdentifier(1, 2);
-            var hostAdmin = new UserIdentifier(null, 1);
-
-            await _notificationPublisher.PublishAsync(
-                    "App.SimpleMessage",
-                    new MessageNotificationData(message),
-                    severity: NotificationSeverity.Info,
-                    userIds: new[] { defaultTenantAdmin, hostAdmin }
-                 );
-
-            return Content("Sent notification: " + message);
         }
 
         #endregion

@@ -6,13 +6,11 @@
 @inject IWebResourceManager WebResourceManager
 @inject ILanguageManager LanguageManager
 @inject IMultiTenancyConfig MultiTenancyConfig
-@{
-    Layout = null;
-    AbpAntiForgeryManager.SetCookie(Context);
+@{ Layout = null;
+                AbpAntiForgeryManager.SetCookie(Context);
 
-    var pageTitle = !string.IsNullOrWhiteSpace(ViewBag.Title) ? ViewBag.Title + " / " : "";
-    pageTitle += "OnlineExam";
-}
+                var pageTitle = !string.IsNullOrWhiteSpace(ViewBag.Title) ? ViewBag.Title + " / " : "";
+                pageTitle += "OnlineExam"; }
 <!DOCTYPE html>
 <html lang="@LanguageManager.CurrentLanguage.Name">
 <head>
@@ -23,7 +21,7 @@
     <title>@pageTitle</title>
 
     @await Html.PartialAsync("_Styles.cshtml")
-    @RenderSection("styles", required: false)
+    @await RenderSectionAsync("styles", required: false)
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
@@ -31,12 +29,6 @@
             <a href="/"><b>OnlineExam</b></a>
         </div>
         <div class="card">
-            @if (MultiTenancyConfig.IsEnabled)
-            {
-                <div class="card-header">
-                    <vc:tenant-change></vc:tenant-change>
-                </div>
-            }
             <div class="card-body login-card-body">
                 @RenderBody()
             </div>
@@ -51,7 +43,7 @@
         </div>
     </div>
     @await Html.PartialAsync("_Scripts.cshtml")
-    @RenderSection("scripts", required: false)
+    @await RenderSectionAsync("scripts", required: false)
     @WebResourceManager.RenderScripts()
 </body>
 </html>
