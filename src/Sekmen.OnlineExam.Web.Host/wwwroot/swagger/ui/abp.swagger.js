@@ -74,32 +74,7 @@ var abp = abp || {};
     };
 
     abp.swagger.login = function (callback) {
-        //Get TenantId first
-        var tenancyName = document.getElementById('tenancyName').value;
-
-        if (tenancyName) {
-            var xhrTenancyName = new XMLHttpRequest();
-            xhrTenancyName.onreadystatechange = function () {
-                if (xhrTenancyName.readyState === XMLHttpRequest.DONE && xhrTenancyName.status === 200) {
-                    var responseJSON = JSON.parse(xhrTenancyName.responseText);
-                    var result = responseJSON.result;
-                    if (result.state === 1) { // Tenant exists and active.
-                        loginUserInternal(result.tenantId, callback); // Login for tenant    
-                    } else {
-                        alert('There is no such tenant or tenant is not active !');
-                    }
-                }
-            };
-
-            xhrTenancyName.open('POST', '/api/services/app/Account/IsTenantAvailable', true);
-            xhrTenancyName.setRequestHeader('Content-type', 'application/json');
-            addAntiForgeryTokenToXhr(xhrTenancyName);
-            xhrTenancyName.send(
-                JSON.stringify({ tenancyName: tenancyName })
-            );
-        } else {
-            loginUserInternal(null, callback); // Login for host
-        }
+        loginUserInternal(null, callback);
     };
 
     abp.swagger.logout = function () {
