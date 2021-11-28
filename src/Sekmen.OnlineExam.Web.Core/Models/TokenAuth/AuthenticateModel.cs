@@ -1,17 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Abp.Auditing;
-using Abp.Authorization.Users;
+﻿using Abp.Auditing;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sekmen.OnlineExam.Models.TokenAuth
 {
     public class AuthenticateModel
     {
         [Required]
-        [StringLength(AbpUserBase.MaxEmailAddressLength)]
         public string UserNameOrEmailAddress { get; set; }
 
         [Required]
-        [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
         public string Password { get; set; }
 
