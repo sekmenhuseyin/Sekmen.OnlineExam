@@ -18,6 +18,9 @@
     <LangVersion>7.2</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sekmen.OnlineExam.Application\Sekmen.OnlineExam.Application.csproj" />
     <ProjectReference Include="..\Sekmen.OnlineExam.EntityFramework\Sekmen.OnlineExam.EntityFramework.csproj" />

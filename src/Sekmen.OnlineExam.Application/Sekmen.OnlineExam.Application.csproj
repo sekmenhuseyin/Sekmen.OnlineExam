@@ -11,6 +11,10 @@
     <RootNamespace>Sekmen.OnlineExam</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\Sekmen.OnlineExam\src\Sekmen.OnlineExam.Application\Sekmen.OnlineExam.Application.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sekmen.OnlineExam.Core\Sekmen.OnlineExam.Core.csproj" />
   </ItemGroup>
