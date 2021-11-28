@@ -16,7 +16,7 @@
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
     <RootNamespace>Sekmen.OnlineExam</RootNamespace>
     <LangVersion>7.2</LangVersion>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
