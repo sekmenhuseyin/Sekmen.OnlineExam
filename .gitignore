@@ -250,5 +250,5 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-/src/Sekmen.OnlineExam.Web.Mvc/App_Data/Logs/Logs.txt
-/src/Sekmen.OnlineExam.Web.Host/App_Data/Logs/Logs.txt
+/src/Sekmen.OnlineExam.Web.Mvc/App_Data/Logs/*
+/src/Sekmen.OnlineExam.Web.Host/App_Data/Logs/*
