@@ -16,5 +16,7 @@ namespace Sekmen.OnlineExam
         /// </summary>
         public static readonly string DefaultPassPhrase =
             DebugHelper.IsDebug ? "gsKxGZ012HLL3MI5" : "6e211ff8d12b443fb9b92870f149313d";
+
+        public static string DbTablePrefix => "App";
     }
 }
