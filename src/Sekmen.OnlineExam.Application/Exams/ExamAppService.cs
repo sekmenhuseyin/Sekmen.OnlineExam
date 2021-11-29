@@ -31,7 +31,7 @@ namespace Sekmen.OnlineExam.Exams
         public override ExamDto Update(ExamDto input)
         {
             var item = Repository.Get(input.Id);
-            if (item.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 1)
+            if (item.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 2)
                 return input;
 
             var entityById = GetEntityById(input.Id);
@@ -43,7 +43,7 @@ namespace Sekmen.OnlineExam.Exams
         public override void Delete(EntityDto<Guid> input)
         {
             var item = Repository.Get(input.Id);
-            if (item.CreatorUserId == AbpSession.UserId || AbpSession.UserId == 1)
+            if (item.CreatorUserId == AbpSession.UserId || AbpSession.UserId <= 2)
                 base.Delete(input);
         }
 

@@ -1,24 +1,24 @@
 ﻿(function ($) {
-    var _examService = abp.services.app.exam,
-        l = abp.localization.getSource('OnlineExam'),
-        _$modal = $('#ExamCreateModal'),
+    var _answerService = abp.services.app.answer,
+        l = abp.localization.getSource('OnlineAnswer'),
+        _$modal = $('#AnswerCreateModal'),
         _$form = _$modal.find('form'),
-        _$table = $('#ExamsTable');
+        _$table = $('#AnswersTable');
 
-    var _$examsTable = _$table.DataTable({
+    var _$answersTable = _$table.DataTable({
         paging: true,
         serverSide: true,
         listAction: {
-            ajaxFunction: _examService.getAll,
+            ajaxFunction: _answerService.getAll,
             inputFilter: function () {
-                return $('#ExamsSearchForm').serializeFormToObject(true);
+                return $('#AnswersSearchForm').serializeFormToObject(true);
             }
         },
         buttons: [
             {
                 name: 'refresh',
                 text: '<i class="fas fa-redo-alt"></i>',
-                action: () => _$examsTable.draw(false)
+                action: () => _$answersTable.draw(false)
             }
         ],
         responsive: {
@@ -39,35 +39,26 @@
             },
             {
                 targets: 2,
-                data: 'duration',
+                data: 'order',
                 sortable: false
             },
             {
                 targets: 3,
-                data: 'questionCount',
+                data: 'isCorrect',
                 sortable: false
             },
             {
                 targets: 4,
-                data: 'isActive',
-                sortable: false,
-                render: data => `<input type="checkbox" disabled ${data ? 'checked' : ''}>`
-            },
-            {
-                targets: 5,
                 data: null,
                 sortable: false,
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
                     return [
-                        `   <a href="/Questions?examId=${row.id}" class="btn btn-sm bg-primary questions">`,
-                        `       <i class="fas fa-folder-plus"></i> ${l('Questions')}`,
-                        '   </a>',
-                        `   <button type="button" class="btn btn-sm bg-secondary edit-exam" data-exam-id="${row.id}" data-toggle="modal" data-target="#ExamEditModal">`,
+                        `   <button type="button" class="btn btn-sm bg-secondary edit-answer" data-answer-id="${row.id}" data-toggle="modal" data-target="#AnswerEditModal">`,
                         `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
                         '   </button>',
-                        `   <button type="button" class="btn btn-sm bg-danger delete-exam" data-exam-id="${row.id}" data-exam-name="${row.name}">`,
+                        `   <button type="button" class="btn btn-sm bg-danger delete-answer" data-answer-id="${row.id}" data-answer-name="${row.name}">`,
                         `       <i class="fas fa-trash"></i> ${l('Delete')}`,
                         '   </button>'
                     ].join('');
@@ -92,75 +83,75 @@
             return;
         }
 
-        var exam = _$form.serializeFormToObject();
-        exam.roleNames = [];
+        var answer = _$form.serializeFormToObject();
+        answer.roleNames = [];
         var _$roleCheckboxes = _$form[0].querySelectorAll("input[name='role']:checked");
         if (_$roleCheckboxes) {
             for (var roleIndex = 0; roleIndex < _$roleCheckboxes.length; roleIndex++) {
                 var _$roleCheckbox = $(_$roleCheckboxes[roleIndex]);
-                exam.roleNames.push(_$roleCheckbox.val());
+                answer.roleNames.push(_$roleCheckbox.val());
             }
         }
 
         abp.ui.setBusy(_$modal);
-        _examService.create(exam).done(function () {
+        _answerService.create(answer).done(function () {
             _$modal.modal('hide');
             _$form[0].reset();
             abp.notify.info(l('SavedSuccessfully'));
-            _$examsTable.ajax.reload();
+            _$answersTable.ajax.reload();
         }).always(function () {
             abp.ui.clearBusy(_$modal);
         });
     });
 
-    $(document).on('click', '.delete-exam', function () {
-        var examId = $(this).attr("data-exam-id");
-        var examName = $(this).attr('data-exam-name');
+    $(document).on('click', '.delete-answer', function () {
+        var answerId = $(this).attr("data-answer-id");
+        var answerName = $(this).attr('data-answer-name');
 
-        deleteExam(examId, examName);
+        deleteAnswer(answerId, answerName);
     });
 
-    function deleteExam(examId, examName) {
+    function deleteAnswer(answerId, answerName) {
         abp.message.confirm(
             abp.utils.formatString(
                 l('AreYouSureWantToDelete'),
-                examName),
+                answerName),
             null,
             (isConfirmed) => {
                 if (isConfirmed) {
-                    _examService.delete({
-                        id: examId
+                    _answerService.delete({
+                        id: answerId
                     }).done(() => {
                         abp.notify.info(l('SuccessfullyDeleted'));
-                        _$examsTable.ajax.reload();
+                        _$answersTable.ajax.reload();
                     });
                 }
             }
         );
     }
 
-    $(document).on('click', '.edit-exam', function (e) {
-        var examId = $(this).attr("data-exam-id");
+    $(document).on('click', '.edit-answer', function (e) {
+        var answerId = $(this).attr("data-answer-id");
 
         e.preventDefault();
         abp.ajax({
-            url: abp.appPath + 'Exams/EditModal?examId=' + examId,
+            url: abp.appPath + 'Answers/EditModal?answerId=' + answerId,
             type: 'POST',
             dataType: 'html',
             success: function (content) {
-                $('#ExamEditModal div.modal-content').html(content);
+                $('#AnswerEditModal div.modal-content').html(content);
             },
             error: function (e) {
             }
         });
     });
 
-    $(document).on('click', 'a[data-target="#ExamCreateModal"]', (e) => {
-        $('.nav-tabs a[href="#exam-details"]').tab('show')
+    $(document).on('click', 'a[data-target="#AnswerCreateModal"]', (e) => {
+        $('.nav-tabs a[href="#answer-details"]').tab('show')
     });
 
-    abp.event.on('exam.edited', (data) => {
-        _$examsTable.ajax.reload();
+    abp.event.on('answer.edited', (data) => {
+        _$answersTable.ajax.reload();
     });
 
     _$modal.on('shown.bs.modal', () => {
@@ -170,12 +161,12 @@
     });
 
     $('.btn-search').on('click', (e) => {
-        _$examsTable.ajax.reload();
+        _$answersTable.ajax.reload();
     });
 
     $('.txt-search').on('keypress', (e) => {
         if (e.which == 13) {
-            _$examsTable.ajax.reload();
+            _$answersTable.ajax.reload();
             return false;
         }
     });

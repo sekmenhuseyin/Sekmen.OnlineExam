@@ -5,25 +5,25 @@ using Abp.Domain.Repositories;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Sekmen.OnlineExam.Exams;
-using Sekmen.OnlineExam.ExamsQuestions.Dto;
+using Sekmen.OnlineExam.ExamsQuestionsAnswers.Dto;
 using System;
 using System.Linq;
 
-namespace Sekmen.OnlineExam.ExamsQuestions
+namespace Sekmen.OnlineExam.ExamsQuestionsAnswers
 {
-    public class QuestionAppService : CrudAppService<Question, QuestionDto, Guid, PagedQuestionResultRequestDto, CreateUpdateQuestionDto, QuestionDto>, IQuestionAppService
+    public class AnswerAppService : CrudAppService<Answer, AnswerDto, Guid, PagedAnswerResultRequestDto, CreateUpdateAnswerDto, AnswerDto>, IAnswerAppService
     {
-        private readonly IRepository<Exam, Guid> _examRepository;
+        private readonly IRepository<Question, Guid> _questionRepository;
 
-        public QuestionAppService(IRepository<Question, Guid> repository, IRepository<Exam, Guid> examRepository) : base(repository)
+        public AnswerAppService(IRepository<Answer, Guid> repository, IRepository<Question, Guid> questionRepository) : base(repository)
         {
-            _examRepository = examRepository;
+            _questionRepository = questionRepository;
         }
 
-        public override QuestionDto Create(CreateUpdateQuestionDto input)
+        public override AnswerDto Create(CreateUpdateAnswerDto input)
         {
-            var exam = _examRepository.FirstOrDefault(input.ExamId)
-                ?? throw new UserFriendlyException(L("ExamNotFound"));
+            var exam = _questionRepository.FirstOrDefault(input.QuestionId)
+                       ?? throw new UserFriendlyException(L("ExamNotFound"));
 
             if (exam.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 2)
                 throw new AbpAuthorizationException();
@@ -35,14 +35,14 @@ namespace Sekmen.OnlineExam.ExamsQuestions
             return MapToEntityDto(entity);
         }
 
-        public override QuestionDto Update(QuestionDto input)
+        public override AnswerDto Update(AnswerDto input)
         {
             var item = Repository.Get(input.Id);
             if (item.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 2)
                 return input;
 
             var entityById = GetEntityById(input.Id);
-            entityById.Update(input.Name, input.Order, AbpSession.GetUserId());
+            entityById.Update(input.Name, input.IsCorrect, input.Order, AbpSession.GetUserId());
             CurrentUnitOfWork.SaveChanges();
             return MapToEntityDto(entityById);
         }
@@ -54,14 +54,14 @@ namespace Sekmen.OnlineExam.ExamsQuestions
                 base.Delete(input);
         }
 
-        protected override IQueryable<Question> ApplySorting(IQueryable<Question> query, PagedQuestionResultRequestDto input)
+        protected override IQueryable<Answer> ApplySorting(IQueryable<Answer> query, PagedAnswerResultRequestDto input)
         {
             return query.OrderBy(m => m.Order);
         }
 
-        protected override IQueryable<Question> CreateFilteredQuery(PagedQuestionResultRequestDto input)
+        protected override IQueryable<Answer> CreateFilteredQuery(PagedAnswerResultRequestDto input)
         {
-            return Repository.GetAll().Where(m => m.ExamId.Equals(input.ExamId));
+            return Repository.GetAll().Where(m => m.QuestionId.Equals(input.QuestionId));
         }
     }
 }

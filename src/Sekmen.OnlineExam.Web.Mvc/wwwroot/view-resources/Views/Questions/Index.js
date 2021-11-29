@@ -50,9 +50,9 @@
                 defaultContent: '',
                 render: (data, type, row, meta) => {
                     return [
-                        `   <button type="button" class="btn btn-sm bg-secondary answers" data-question-id="${row.id}" data-toggle="modal" data-target="#QuestionAnswersModal">`,
+                        `   <a href="/Answers?questionId=${row.id}" class="btn btn-sm bg-primary answers">`,
                         `       <i class="fas fa-folder-plus"></i> ${l('Answers')}`,
-                        '   </button>',
+                        '   </a>',
                         `   <button type="button" class="btn btn-sm bg-secondary edit-question" data-question-id="${row.id}" data-toggle="modal" data-target="#QuestionEditModal">`,
                         `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
                         '   </button>',

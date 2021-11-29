@@ -20,7 +20,7 @@ namespace Sekmen.OnlineExam.Tests.Exams
         public void GetExams_Test()
         {
             // Act
-            var output = _examAppService.GetAll(new PagedExamResultRequestDto { MaxResultCount = 20, SkipCount = 0 });
+            var output = _examAppService.GetAll(new PagedExamResultRequestDto());
 
             // Assert
             output.Items.Count.ShouldBeGreaterThan(0);

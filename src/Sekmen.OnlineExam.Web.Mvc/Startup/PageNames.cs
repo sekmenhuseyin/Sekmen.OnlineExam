@@ -8,5 +8,6 @@
         public const string Roles = "Roles";
         public static string Exams = "Exams";
         public static string Questions => "Questions";
+        public static string Answers => "Answers";
     }
 }
