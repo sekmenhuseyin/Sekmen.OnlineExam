@@ -15,7 +15,6 @@ namespace Sekmen.OnlineExam.Web.Controllers
             _answerAppService = answerAppService;
         }
 
-
         public IActionResult Index()
         {
             return View();
