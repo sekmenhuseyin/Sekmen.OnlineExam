@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Sekmen.OnlineExam.Web.Tests.Controllers
 {
-    public class HomeController_Tests : OnlineExamWebTestBase
+    public class ExamsController_Tests : OnlineExamWebTestBase
     {
         [Fact]
         public async Task Index_Test()
@@ -18,7 +18,7 @@ namespace Sekmen.OnlineExam.Web.Tests.Controllers
             });
 
             //Act
-            var response = await GetResponseAsStringAsync(GetUrl<HomeController>(nameof(HomeController.Index)));
+            var response = await GetResponseAsStringAsync(GetUrl<ExamsController>(nameof(ExamsController.Index)));
 
             //Assert
             response.ShouldNotBeNullOrEmpty();
