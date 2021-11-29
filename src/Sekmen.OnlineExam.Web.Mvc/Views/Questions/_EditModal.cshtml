@@ -1,0 +1,29 @@
+﻿@using Sekmen.OnlineExam.Web.Models.Common.Modals
+@using Sekmen.OnlineExam.ExamsQuestions.Dto
+@model QuestionDto
+@{
+    Layout = null;
+}
+@await Html.PartialAsync("~/Views/Shared/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("EditQuestion")))
+<form name="QuestionEditForm" role="form" class="form-horizontal">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="modal-body">
+        <div class="container" id="edit-exam-details">
+            <div class="form-group row required">
+                <label class="col-md-3 col-form-label" for="name">@L("Name")</label>
+                <div class="col-md-9">
+                    <input id="name" type="text" class="form-control" name="Name" value="@Model.Name" required>
+                </div>
+            </div>
+            <div class="form-group row required">
+                <label class="col-md-3 col-form-label" for="order">@L("Order")</label>
+                <div class="col-md-9">
+                    <input id="order" type="text" class="form-control" name="Order" value="@Model.Order" required>
+                </div>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Modals/_ModalFooterWithSaveAndCancel.cshtml")
+</form>
+
+<script src="~/view-resources/Views/Questions/_EditModal.js" asp-append-version="true"></script>

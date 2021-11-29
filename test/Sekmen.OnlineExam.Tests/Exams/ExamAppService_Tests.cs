@@ -2,6 +2,7 @@
 using Sekmen.OnlineExam.Exams;
 using Sekmen.OnlineExam.Exams.Dto;
 using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Sekmen.OnlineExam.Tests.Exams
@@ -26,7 +27,7 @@ namespace Sekmen.OnlineExam.Tests.Exams
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task CreateExams_TestAsync()
+        public async Task CreateExams_TestAsync()
         {
             // Act
             _examAppService.Create(new CreateUpdateExamDto

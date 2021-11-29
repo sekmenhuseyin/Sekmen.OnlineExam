@@ -24,12 +24,13 @@ namespace Sekmen.OnlineExam.Exams
             QuestionCount = 0;
         }
 
-        public void Update(string name, string description, int duration, bool isActive)
+        public void Update(string name, string description, int duration, bool isActive, long userId)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description ?? throw new ArgumentNullException(nameof(description));
             Duration = duration;
             IsActive = isActive;
+            UpdateModifier(userId);
         }
 
         public Exam AddQuestion()
@@ -42,6 +43,18 @@ namespace Sekmen.OnlineExam.Exams
         {
             QuestionCount--;
             return this;
+        }
+
+        public void UpdateCreator(long userId)
+        {
+            CreatorUserId = userId;
+            IsActive = true;
+        }
+
+        public void UpdateModifier(long userId)
+        {
+            LastModificationTime = DateTime.Now;
+            LastModifierUserId = userId;
         }
     }
 }

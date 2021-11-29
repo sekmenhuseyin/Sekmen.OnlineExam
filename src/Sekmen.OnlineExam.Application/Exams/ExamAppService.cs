@@ -4,6 +4,7 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Abp.Runtime.Session;
 using Sekmen.OnlineExam.Exams.Dto;
 using System;
 using System.Linq;
@@ -20,29 +21,29 @@ namespace Sekmen.OnlineExam.Exams
 
         public override ExamDto Create(CreateUpdateExamDto input)
         {
-            input.IsActive = true;
-            return base.Create(input);
+            var entity = MapToEntity(input);
+            entity.UpdateCreator(AbpSession.GetUserId());
+            Repository.Insert(entity);
+            CurrentUnitOfWork.SaveChanges();
+            return MapToEntityDto(entity);
         }
 
         public override ExamDto Update(ExamDto input)
         {
-            if (AbpSession.UserId < 3)
-                return base.Update(input);
-
             var item = Repository.Get(input.Id);
-            if (item.CreatorUserId == AbpSession.UserId)
-                return base.Update(input);
+            if (item.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 1)
+                return input;
 
-            return input;
+            var entityById = GetEntityById(input.Id);
+            entityById.Update(input.Name, input.Description, input.Duration, input.IsActive, AbpSession.GetUserId());
+            CurrentUnitOfWork.SaveChanges();
+            return MapToEntityDto(entityById);
         }
 
         public override void Delete(EntityDto<Guid> input)
         {
-            if (AbpSession.UserId < 3)
-                base.Delete(input);
-
             var item = Repository.Get(input.Id);
-            if (item.CreatorUserId == AbpSession.UserId)
+            if (item.CreatorUserId == AbpSession.UserId || AbpSession.UserId == 1)
                 base.Delete(input);
         }
 
