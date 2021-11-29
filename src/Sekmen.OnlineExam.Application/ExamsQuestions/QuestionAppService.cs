@@ -25,7 +25,7 @@ namespace Sekmen.OnlineExam.ExamsQuestions
             var exam = _examRepository.FirstOrDefault(input.ExamId)
                 ?? throw new UserFriendlyException(L("ExamNotFound"));
 
-            if (exam.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 1)
+            if (exam.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 2)
                 throw new AbpAuthorizationException();
 
             return base.Create(input);
@@ -34,7 +34,7 @@ namespace Sekmen.OnlineExam.ExamsQuestions
         public override QuestionDto Update(QuestionDto input)
         {
             var item = Repository.Get(input.Id);
-            if (item.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 1)
+            if (item.CreatorUserId != AbpSession.UserId && AbpSession.UserId > 2)
                 return input;
 
             var entityById = GetEntityById(input.Id);
@@ -46,7 +46,7 @@ namespace Sekmen.OnlineExam.ExamsQuestions
         public override void Delete(EntityDto<Guid> input)
         {
             var item = Repository.Get(input.Id);
-            if (item.CreatorUserId == AbpSession.UserId || AbpSession.UserId == 1)
+            if (item.CreatorUserId == AbpSession.UserId || AbpSession.UserId <= 2)
                 base.Delete(input);
         }
 
