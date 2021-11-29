@@ -15,6 +15,12 @@ namespace Sekmen.OnlineExam.Exams
         {
         }
 
+        public override ExamDto Create(CreateUpdateExamDto input)
+        {
+            input.IsActive = true;
+            return base.Create(input);
+        }
+
         public override ExamDto Update(ExamDto input)
         {
             if (AbpSession.UserId < 3)
