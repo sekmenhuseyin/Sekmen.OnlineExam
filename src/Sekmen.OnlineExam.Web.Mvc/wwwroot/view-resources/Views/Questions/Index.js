@@ -39,31 +39,20 @@
             },
             {
                 targets: 2,
-                data: 'duration',
+                data: 'order',
                 sortable: false
             },
             {
                 targets: 3,
-                data: 'questionCount',
-                sortable: false
-            },
-            {
-                targets: 4,
-                data: 'isActive',
-                sortable: false,
-                render: data => `<input type="checkbox" disabled ${data ? 'checked' : ''}>`
-            },
-            {
-                targets: 5,
                 data: null,
                 sortable: false,
                 autoWidth: false,
                 defaultContent: '',
                 render: (data, type, row, meta) => {
                     return [
-                        `   <a href="/Questions/${row.id}" class="btn btn-sm bg-primary questions">`,
-                        `       <i class="fas fa-folder-plus"></i> ${l('Questions')}`,
-                        '   </a>',
+                        `   <button type="button" class="btn btn-sm bg-secondary answers" data-question-id="${row.id}" data-toggle="modal" data-target="#QuestionAnswersModal">`,
+                        `       <i class="fas fa-folder-plus"></i> ${l('Answers')}`,
+                        '   </button>',
                         `   <button type="button" class="btn btn-sm bg-secondary edit-question" data-question-id="${row.id}" data-toggle="modal" data-target="#QuestionEditModal">`,
                         `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
                         '   </button>',
