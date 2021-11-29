@@ -126,5 +126,6 @@
     <text name="Questions">Questions</text>
     <text name="Answer">Answer</text>
     <text name="Answers">Answers</text>
+    <text name="QuestionCount">Question Count</text>
   </texts>
 </localizationDictionary>

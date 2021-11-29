@@ -33,6 +33,7 @@ namespace Sekmen.OnlineExam.EntityFrameworkCore.Seed.Host
                 _context.Questions.Add(question1);
                 var question2 = new Question(exam, "Select 2", 2);
                 _context.Questions.Add(question2);
+                exam.AddQuestion().AddQuestion();
                 _context.SaveChanges();
 
                 //Answers
