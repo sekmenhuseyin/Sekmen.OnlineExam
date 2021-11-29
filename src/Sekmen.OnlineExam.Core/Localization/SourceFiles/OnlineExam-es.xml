@@ -116,5 +116,15 @@
     <text name="Clear">Borrar</text>
     <text name="ResetPasswordStepOneInfo">1. Ingrese su contraseña de administrador</text>
     <text name="ResetPasswordStepTwoInfo">2. Copie esta contraseña aleatoria para poder enviársela al usuario</text>
+    <text name="UsersActivation"> Activación de usuarios </text>
+    <text name="Exam"> Examen </text>
+    <text name="Exams"> Exámenes </text>
+    <text name="Description"> Descripción </text>
+    <text name="Duration"> Duración </text>
+    <text name="DurationDescription"> Si selecciona 0, no habrá límite de tiempo </text>
+    <text name="Question"> Pregunta </text>
+    <text name="Questions"> Preguntas </text>
+    <text name="Answer"> Responder </text>
+    <text name="Answers"> Respuestas </text>
   </texts>
 </localizationDictionary>

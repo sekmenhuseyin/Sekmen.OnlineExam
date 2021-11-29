@@ -117,5 +117,14 @@
     <text name="ResetPasswordStepOneInfo">1. Yönetici şifresini girin</text>
     <text name="ResetPasswordStepTwoInfo">2. Bu şifreyi kaydettikten sonra ilgili kullanıcıya gönderin</text>
     <text name="UsersActivation">Kullanıcıları aktifleştirme</text>
+    <text name="Exam">Sınav</text>
+    <text name="Exams">Sınavlar</text>
+    <text name="Description">Açıklama</text>
+    <text name="Duration">Süre</text>
+    <text name="DurationDescription">Eğer 0 seçerseniz süre limiti olmayacaktır</text>
+    <text name="Question">Soru</text>
+    <text name="Questions">Sorular</text>
+    <text name="Answer">Cevap</text>
+    <text name="Answers">Cevaplar</text>
   </texts>
 </localizationDictionary>

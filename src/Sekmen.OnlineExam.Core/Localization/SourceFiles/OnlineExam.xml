@@ -117,5 +117,14 @@
     <text name="ResetPasswordStepOneInfo">1. Enter your administrator password</text>
     <text name="ResetPasswordStepTwoInfo">2. Copy this random password so you can send it to the user</text>
     <text name="UsersActivation">Users activation</text>
+    <text name="Exam">Exam</text>
+    <text name="Exams">Exams</text>
+    <text name="Description">Description</text>
+    <text name="Duration">Duration</text>
+    <text name="DurationDescription">If you select 0, there will be no time limit</text>
+    <text name="Question">Question</text>
+    <text name="Questions">Questions</text>
+    <text name="Answer">Answer</text>
+    <text name="Answers">Answers</text>
   </texts>
 </localizationDictionary>
