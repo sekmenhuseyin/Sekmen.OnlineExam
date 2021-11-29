@@ -148,15 +148,6 @@
         "js/buttons.bootstrap4.min.js"
       ]
     },
-    {
-      "library": "chart.js@2.9.4",
-      "provider": "jsdelivr",
-      "destination": "wwwroot/libs/chartjs",
-      "files": [
-        "dist/Chart.css",
-        "dist/Chart.js"
-      ]
-    },
     //admin-lte libs end
 
     //other libs start

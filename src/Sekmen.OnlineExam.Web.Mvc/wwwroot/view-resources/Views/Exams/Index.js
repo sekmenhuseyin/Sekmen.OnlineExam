@@ -56,6 +56,9 @@
                 defaultContent: '',
                 render: (data, type, row, meta) => {
                     return [
+                        `   <a href="/Questions/${row.id}" class="btn btn-sm bg-primary questions">`,
+                        `       <i class="fas fa-folder-plus"></i> ${l('Questions')}`,
+                        '   </a>',
                         `   <button type="button" class="btn btn-sm bg-secondary edit-exam" data-exam-id="${row.id}" data-toggle="modal" data-target="#ExamEditModal">`,
                         `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}`,
                         '   </button>',
