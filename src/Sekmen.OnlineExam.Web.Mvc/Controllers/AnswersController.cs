@@ -21,10 +21,10 @@ namespace Sekmen.OnlineExam.Web.Controllers
             return View();
         }
 
-        public IActionResult EditModal(Guid questionId)
+        public IActionResult EditModal(Guid answerId)
         {
-            var question = _answerAppService.Get(new EntityDto<Guid>(questionId));
-            return PartialView("_EditModal", question);
+            var answer = _answerAppService.Get(new EntityDto<Guid>(answerId));
+            return PartialView("_EditModal", answer);
         }
     }
 }

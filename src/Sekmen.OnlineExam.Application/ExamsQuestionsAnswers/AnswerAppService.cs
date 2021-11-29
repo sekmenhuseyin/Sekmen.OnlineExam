@@ -54,6 +54,11 @@ namespace Sekmen.OnlineExam.ExamsQuestionsAnswers
                 base.Delete(input);
         }
 
+        protected override IQueryable<Answer> ApplySorting(IQueryable<Answer> query, PagedAnswerResultRequestDto input)
+        {
+            return query.OrderBy(m => m.Order);
+        }
+
         protected override IQueryable<Answer> CreateFilteredQuery(PagedAnswerResultRequestDto input)
         {
             return Repository.GetAll().Where(m => m.QuestionId.Equals(input.QuestionId));
