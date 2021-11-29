@@ -7,5 +7,6 @@
         public const string Users = "Users";
         public const string Roles = "Roles";
         public static string Exams = "Exams";
+        public static string Questions => "Questions";
     }
 }
