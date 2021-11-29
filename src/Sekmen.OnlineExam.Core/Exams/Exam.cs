@@ -9,6 +9,7 @@ namespace Sekmen.OnlineExam.Exams
         public string Description { get; protected set; }
         public int Duration { get; protected set; }
         public bool IsActive { get; protected set; }
+        public int QuestionCount { get; protected set; }
 
         protected Exam()
         {
@@ -20,6 +21,7 @@ namespace Sekmen.OnlineExam.Exams
             Description = description ?? throw new ArgumentNullException(nameof(description));
             Duration = duration;
             IsActive = true;
+            QuestionCount = 0;
         }
 
         public void Update(string name, string description, int duration, bool isActive)
@@ -28,6 +30,18 @@ namespace Sekmen.OnlineExam.Exams
             Description = description ?? throw new ArgumentNullException(nameof(description));
             Duration = duration;
             IsActive = isActive;
+        }
+
+        public Exam AddQuestion()
+        {
+            QuestionCount++;
+            return this;
+        }
+
+        public Exam RemoveQuestion()
+        {
+            QuestionCount--;
+            return this;
         }
     }
 }

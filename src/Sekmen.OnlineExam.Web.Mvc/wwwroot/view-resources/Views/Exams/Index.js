@@ -44,12 +44,17 @@
             },
             {
                 targets: 3,
+                data: 'questionCount',
+                sortable: false
+            },
+            {
+                targets: 4,
                 data: 'isActive',
                 sortable: false,
                 render: data => `<input type="checkbox" disabled ${data ? 'checked' : ''}>`
             },
             {
-                targets: 4,
+                targets: 5,
                 data: null,
                 sortable: false,
                 autoWidth: false,

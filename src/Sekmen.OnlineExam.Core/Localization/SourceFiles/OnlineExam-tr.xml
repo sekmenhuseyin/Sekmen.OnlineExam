@@ -126,5 +126,6 @@
     <text name="Questions">Sorular</text>
     <text name="Answer">Cevap</text>
     <text name="Answers">Cevaplar</text>
+    <text name="QuestionCount">Soru Sayısı</text>
   </texts>
 </localizationDictionary>
