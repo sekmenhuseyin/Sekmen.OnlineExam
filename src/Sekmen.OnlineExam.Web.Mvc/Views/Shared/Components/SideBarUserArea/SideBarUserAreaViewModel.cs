@@ -4,22 +4,13 @@ namespace Sekmen.OnlineExam.Web.Views.Shared.Components.SideBarUserArea
 {
     public class SideBarUserAreaViewModel
     {
-        public GetCurrentLoginInformationsOutput LoginInformations { get; set; }
-
-        public bool IsMultiTenancyEnabled { get; set; }
+        public GetCurrentLoginInformationsOutput LoginInformation { get; set; }
 
         public string GetShownLoginName()
         {
-            var userName = LoginInformations.User.UserName;
+            var userName = LoginInformation.User?.UserName;
 
-            if (!IsMultiTenancyEnabled)
-            {
-                return userName;
-            }
-
-            return LoginInformations.Tenant == null
-                ? ".\\" + userName
-                : LoginInformations.Tenant.TenancyName + "\\" + userName;
+            return userName;
         }
     }
 }

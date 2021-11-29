@@ -2,6 +2,7 @@
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Sekmen.OnlineExam.Exams.Dto;
 using System;
@@ -47,7 +48,9 @@ namespace Sekmen.OnlineExam.Exams
 
         protected override IQueryable<Exam> CreateFilteredQuery(PagedExamResultRequestDto input)
         {
-            return Repository.GetAll().WhereIf(AbpSession.UserId > 2, m => m.CreatorUserId == AbpSession.UserId);
+            return Repository.GetAll()
+                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), m => m.Name.Contains(input.Keyword))
+                .WhereIf(AbpSession.UserId > 2, m => m.CreatorUserId == AbpSession.UserId);
         }
     }
 }
