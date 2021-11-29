@@ -23,7 +23,6 @@ namespace Sekmen.OnlineExam.EntityFrameworkCore.Seed.Host
                 new ApplicationLanguage(tenantId, "fr", "Français", "famfamfam-flags fr"),
                 new ApplicationLanguage(tenantId, "pt-BR", "Português", "famfamfam-flags br"),
                 new ApplicationLanguage(tenantId, "tr", "Türkçe", "famfamfam-flags tr"),
-                new ApplicationLanguage(tenantId, "ru", "Русский", "famfamfam-flags ru"),
                 new ApplicationLanguage(tenantId, "es", "Español", "famfamfam-flags es"),
                 new ApplicationLanguage(tenantId, "nl", "Nederlands", "famfamfam-flags nl")
             };

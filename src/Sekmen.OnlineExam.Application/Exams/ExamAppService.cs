@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Sekmen.OnlineExam.Exams.Dto;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace Sekmen.OnlineExam.Exams
 {
+    [AbpAuthorize]
     public class ExamAppService : CrudAppService<Exam, ExamDto, Guid, PagedExamResultRequestDto, CreateUpdateExamDto, ExamDto>, IExamAppService
     {
 
