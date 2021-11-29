@@ -22,10 +22,22 @@ namespace Sekmen.OnlineExam.Exams
             Order = order;
         }
 
-        public void Update(string name, int order)
+        public void Update(string name, int order, long userId)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Order = order;
+            UpdateModifier(userId);
+        }
+
+        public void UpdateCreator(long userId)
+        {
+            CreatorUserId = userId;
+        }
+
+        public void UpdateModifier(long userId)
+        {
+            LastModificationTime = DateTime.Now;
+            LastModifierUserId = userId;
         }
     }
 }
