@@ -45,7 +45,7 @@ namespace Sekmen.OnlineExam.Web.Startup
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
                 {
-                    options.SerializerSettings.ContractResolver = new AbpMvcContractResolver(IocManager.Instance)
+                    options.SerializerSettings.ContractResolver = new AbpMvcContractResolver
                     {
                         NamingStrategy = new CamelCaseNamingStrategy()
                     };

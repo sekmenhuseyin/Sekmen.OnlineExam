@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Abp.Authorization;
 using Sekmen.OnlineExam.Authorization.Roles;
@@ -8,18 +7,11 @@ using Sekmen.OnlineExam.MultiTenancy;
 using Microsoft.Extensions.Logging;
 using Abp.Domain.Uow;
 
-namespace Sekmen.OnlineExam.Identity
-{
-    public class SecurityStampValidator : AbpSecurityStampValidator<Tenant, Role, User>
-    {
-        public SecurityStampValidator(
-            IOptions<SecurityStampValidatorOptions> options,
-            SignInManager signInManager,
-            ISystemClock systemClock,
-            ILoggerFactory loggerFactory,
-            IUnitOfWorkManager unitOfWorkManager)
-            : base(options, signInManager, systemClock, loggerFactory, unitOfWorkManager)
-        {
-        }
-    }
-}
+namespace Sekmen.OnlineExam.Identity;
+
+public class SecurityStampValidator(
+    IOptions<SecurityStampValidatorOptions> options,
+    AbpSignInManager<Tenant, Role, User> signInManager,
+    ILoggerFactory loggerFactory,
+    IUnitOfWorkManager unitOfWorkManager
+) : AbpSecurityStampValidator<Tenant, Role, User>(options, signInManager, loggerFactory, unitOfWorkManager);

@@ -101,21 +101,25 @@ namespace Sekmen.OnlineExam.Users
         }
 
         [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
-        public async Task Activate(EntityDto<long> user)
+        public Task Activate(EntityDto<long> user)
         {
-            await Repository.UpdateAsync(user.Id, async (entity) =>
+            Repository.UpdateAsync(user.Id, (entity) =>
             {
                 entity.IsActive = true;
+                return Task.CompletedTask;
             });
+            return Task.CompletedTask;
         }
 
         [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
-        public async Task DeActivate(EntityDto<long> user)
+        public Task DeActivate(EntityDto<long> user)
         {
-            await Repository.UpdateAsync(user.Id, async (entity) =>
+            Repository.UpdateAsync(user.Id, (entity) =>
             {
                 entity.IsActive = false;
+                return Task.CompletedTask;
             });
+            return Task.CompletedTask;
         }
 
         public async Task<ListResultDto<RoleDto>> GetRoles()
